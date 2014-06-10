@@ -38,6 +38,7 @@ var sh = module.exports = {
    */
   findElements: function(globalParams, element)
   {
+    var re = /^([\s]*)<code>([\w\W]*)<\/code>/;
     var elements = element ? [element] : utils.toArray(document.getElementsByTagName(sh.config.tagName)),
       conf = sh.config,
       result = []
@@ -58,7 +59,11 @@ var sh = module.exports = {
       };
 
       if (item.params['brush'] == null)
-        continue;
+        item.params['brush'] = sh.config.default_brush
+
+      if (item.target.innerHTML.search(re) != -1) {
+        item.target.innerHTML = item.target.innerHTML.replace(re, "$1$2")
+      }
 
       result.push(item);
     }
